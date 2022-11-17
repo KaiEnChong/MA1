@@ -33,7 +33,7 @@
   </data>
  </layer>
  <objectgroup id="14" name="objectLayer">
-  <object id="1" name="start" x="469" y="455">
+  <object id="1" name="start" x="404" y="470">
    <point/>
   </object>
   <object id="4" name="fastfood1" x="570" y="103">

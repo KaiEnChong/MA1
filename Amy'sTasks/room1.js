@@ -18,7 +18,10 @@ class room1 extends Phaser.Scene {
      this.load.image("foodImg", "assets/food.png");
     this.load.image("interiorImg", "assets/interiorFruit.png");
     this.load.image("fruitImg", "assets/roomFruit.png");
-   ;
+    this.load.spritesheet('dessert1Img', 'assets/donut.png',{ frameWidth:18, frameHeight:14 });
+    this.load.spritesheet('dessert2Img', 'assets/icecream.png',{ frameWidth:15, frameHeight:17 });
+   
+   
     }
 
     create() {
@@ -46,22 +49,52 @@ class room1 extends Phaser.Scene {
         window.player = this.player
         this.player.setCollideWorldBounds(true);
 
-        this.tableLayer.setCollisionByExclusion(-1,true);
-        this.physics.add.collider(this.player,this.tableLayer)
+
+        this.anims.create({
+          key:'donut',
+          frames:this.anims.generateFrameNumbers('dessert1Img',
+          { start:0, end:1}),
+          frameRate:2,
+          repeat:-1
+      });
+      this.anims.create({
+        key:'icecream',
+        frames:this.anims.generateFrameNumbers('dessert2Img',
+        { start:0, end:1}),
+        frameRate:2,
+        repeat:-1
+    });
+
+        this.dessert1=this.physics.add.sprite(dessert1.x,dessert1.y,'donut').play('donut').setScale(1.5)
+        this.dessert2=this.physics.add.sprite(dessert2.x,dessert2.y,'icecream').play('icecream').setScale(1.5)
+
+       this.tableLayer.setCollisionByExclusion(-1,true);
+       this.physics.add.collider(this.player,this.tableLayer)
         this.wallLayer.setCollisionByExclusion(-1,true);
         this.physics.add.collider(this.player,this.wallLayer)
         this.dessertLayer.setCollisionByExclusion(-1,true);
         this.physics.add.collider(this.player,this.dessertLayer)
 
 
+        this.physics.add.overlap(
+          this.player,
+          this.dessert1,
+          this.collectdessert1,
+          null,
+          this
+        )
+        this.physics.add.overlap(
+          this.player,
+          this.dessert2,
+          this.collectdessert2,
+          null,
+          this
+        )
 
         this.cursors = this.input.keyboard.createCursorKeys();
 
         // camera follow player
         this.cameras.main.startFollow(this.player);
-
-
-
 
     }
 
@@ -96,6 +129,16 @@ if (this.cursors.left.isDown) {
     this.player.body.setVelocity(0, 0);
     //console.log('idle');
   }
+    }
+
+    collectdessert1(player,item){
+      console.log("this.collectdessert1")
+      item.disableBody(true,true)
+    }
+
+    collectdessert2(player,item){
+      console.log("this.collectdessert2")
+      item.disableBody(true,true)
     }
 
     world(player, tile) {

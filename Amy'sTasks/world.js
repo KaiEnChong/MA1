@@ -140,10 +140,6 @@ this.physics.add.collider(this.player,this.houseLayer)
     this.cameras.main.startFollow(this.player);
   } /////////////////// end of create //////////////////////////////
 //
-//
-//
-//
-//
   update() 
 
   {

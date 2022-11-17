@@ -18,8 +18,9 @@ class room3 extends Phaser.Scene {
      this.load.image("foodImg", "assets/food.png");
     this.load.image("interiorImg", "assets/interiorFruit.png");
     this.load.image("fruitImg", "assets/roomFruit.png");
-    this.load.image("fastfood1Img","assets/fries.png")
-    this.load.image("fastfood2Img","assets/coke.png")
+    this.load.spritesheet('fastfood1Img', 'assets/fries.png',{ frameWidth:10, frameHeight:12 });
+    this.load.spritesheet('fastfood2Img', 'assets/coke.png',{ frameWidth:13, frameHeight:17 });
+    
     }
 
     create() {
@@ -49,12 +50,45 @@ class room3 extends Phaser.Scene {
         window.player = this.player
         this.player.setCollideWorldBounds(true);
 
+        
+        this.anims.create({
+          key:'fries',
+          frames:this.anims.generateFrameNumbers('fastfood1Img',
+          { start:0, end:1}),
+          frameRate:2,
+          repeat:-1
+      });
+      this.anims.create({
+        key:'coke',
+        frames:this.anims.generateFrameNumbers('fastfood2Img',
+        { start:0, end:1}),
+        frameRate:2,
+        repeat:-1
+    });
+    this.fastfood1=this.physics.add.sprite(fastfood1.x,fastfood1.y,'fries').play('fries').setScale(1.5)
+    this.fastfood2=this.physics.add.sprite(fastfood2.x,fastfood2.y,'coke').play('coke').setScale(1.5)
+
         this.tableLayer.setCollisionByExclusion(-1,true);
         this.physics.add.collider(this.player,this.tableLayer)
         this.wallLayer.setCollisionByExclusion(-1,true);
         this.physics.add.collider(this.player,this.wallLayer)
         this.fastfoodLayer.setCollisionByExclusion(-1,true);
         this.physics.add.collider(this.player,this.fastfoodLayer)
+
+        this.physics.add.overlap(
+          this.player,
+          this.fastfood1,
+          this.collectfastfood1,
+          null,
+          this
+        )
+        this.physics.add.overlap(
+          this.player,
+          this.fastfood2,
+          this.collectfastfood2,
+          null,
+          this
+        )
 
         this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -98,7 +132,16 @@ if (this.cursors.left.isDown) {
     //console.log('idle');
   }
     }
-
+    collectdessert1(player,item){
+      console.log("this.collectfastfood1")
+      item.disableBody(true,true)
+    }
+  
+    collectdessert2(player,item){
+      console.log("this.collectfastfood2")
+      item.disableBody(true,true)
+    }
+  
     world(player, tile) {
         console.log("world function");
         this.scene.start("world")
